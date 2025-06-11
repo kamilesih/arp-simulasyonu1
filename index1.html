@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ARP Simülasyonu</title>
+  <style>
+    body { font-family: Arial; margin: 40px; background-color: #f9f9f9; }
+    .container { max-width: 600px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; }
+    label, input, button { display: block; width: 100%; margin-top: 10px; }
+    input { padding: 8px; font-size: 14px; }
+    button { padding: 10px; background-color: #007BFF; color: white; border: none; cursor: pointer; margin-top: 15px; }
+    button:hover { background-color: #0056b3; }
+    .result { margin-top: 20px; font-weight: bold; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ARP Protokolü Simülasyonu</h1>
+    <label for="ip">IP Adresi Girin:</label>
+    <input type="text" id="ip" placeholder="192.168.1.1">
+    <button onclick="sendArpRequest()">ARP Request Gönder</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function sendArpRequest() {
+      const ip = document.getElementById("ip").value;
+      if (!ip) {
+        document.getElementById("result").innerText = "Lütfen geçerli bir IP adresi girin.";
+        return;
+      }
+      const fakeMac = generateFakeMac(ip);
+      document.getElementById("result").innerText = 
+        `ARP Reply: ${ip} adresinin MAC adresi ${fakeMac}`;
+    }
+
+    function generateFakeMac(ip) {
+      const parts = ip.split('.');
+      if (parts.length !== 4 || parts.some(p => isNaN(p) || p < 0 || p > 255)) {
+        return "Geçersiz IP adresi";
+      }
+      return "AA:BB:" + parts.map(part => ('0' + parseInt(part).toString(16)).slice(-2)).join(":");
+    }
+  </script>
+</body>
+</html>
